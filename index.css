@@ -1,0 +1,315 @@
+@import "tailwindcss";
+
+body {
+  background-color: #ffffff;
+}
+
+/* Pointer cursor for all clickable elements */
+a, button, [role="button"], [onclick], .cursor-pointer,
+input[type="submit"], input[type="button"], input[type="reset"],
+select, summary {
+  cursor: pointer;
+}
+
+@theme {
+  --font-sans: "PT Sans", sans-serif;
+  --font-serif: "PT Sans", sans-serif;
+  --color-cream: #fdfbf7;
+  --color-cream-alt: #f7f5f0;
+  --color-charcoal: #1a1a1a;
+  --color-gold: #99ccff;
+  --color-forest: #2d3a2d;
+  --color-forest-dark: #1a241a;
+  --color-sage: #7b8c7b;
+  
+  @keyframes music-bar {
+    0%, 100% { height: 4px; }
+    50% { height: 16px; }
+  }
+}
+
+.animate-music-bar {
+  animation: music-bar 0.8s ease-in-out infinite;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 1s ease-out forwards;
+}
+
+.animate-scroll-bounce {
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+/* ══════════════════════════════════════════════════════
+   SCROLL-DRIVEN ANIMATIONS (2025+)
+   Progressive enhancement — Chrome 115+, Edge 115+, Safari 18+
+   Fallback: IntersectionObserver transitions still active
+   ══════════════════════════════════════════════════════ */
+
+@keyframes sda-fade-up {
+  from { opacity: 0; transform: translateY(clamp(30px, 4vw, 60px)); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes sda-fade-scale {
+  from { opacity: 0; transform: scale(0.94); filter: blur(5px); }
+  to   { opacity: 1; transform: scale(1);    filter: blur(0); }
+}
+
+@keyframes sda-clip-up {
+  from { clip-path: inset(100% 0 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes sda-slide-in {
+  from { opacity: 0; transform: translateX(var(--sda-x, 50px)); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes sda-parallax-hero {
+  from { transform: translateY(0%) scale(1.15); }
+  to   { transform: translateY(25%) scale(1.15); }
+}
+
+@keyframes sda-img-ken-burns {
+  from { transform: scale(1.1); }
+  to   { transform: scale(1); }
+}
+
+@supports (animation-timeline: view()) {
+  .sda-fade-up {
+    animation: sda-fade-up ease-out both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 35%;
+  }
+
+  .sda-fade-up-slow {
+    animation: sda-fade-up ease-out both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 20%;
+  }
+
+  .sda-fade-scale {
+    animation: sda-fade-scale ease-out both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 40%;
+  }
+
+  .sda-clip-up {
+    animation: sda-clip-up cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 35%;
+  }
+
+  .sda-slide-left {
+    --sda-x: 50px;
+    animation: sda-slide-in ease-out both;
+    animation-timeline: view();
+    animation-range: entry 5% entry 40%;
+  }
+
+  .sda-slide-right {
+    --sda-x: -50px;
+    animation: sda-slide-in ease-out both;
+    animation-timeline: view();
+    animation-range: entry 5% entry 40%;
+  }
+
+  .sda-img-ken-burns {
+    animation: sda-img-ken-burns ease-out both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 60%;
+  }
+
+  .sda-hero-parallax {
+    animation: sda-parallax-hero linear both;
+    animation-timeline: scroll();
+  }
+}
+
+body {
+  font-family: "PT Sans", sans-serif;
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  cursor: default;
+}
+
+.serif {
+  font-family: var(--font-serif);
+}
+
+/* Hide global scrollbar — replaced by bullet dot nav */
+::-webkit-scrollbar {
+  width: 0px;
+  display: none;
+}
+html {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar for horizontal scroll sections */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Selection */
+::selection {
+  background: #99ccff;
+  color: white;
+}
+
+/* Subtle title shake */
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(0.5px, 0.5px) rotate(0.4deg); }
+  50% { transform: translate(-0.5px, -0.5px) rotate(-0.4deg); }
+  75% { transform: translate(-0.5px, 0.5px) rotate(0.4deg); }
+}
+
+.animate-shake {
+  animation: shake 4s ease-in-out infinite;
+  display: inline-block;
+  transform-origin: center;
+}
+
+/* Smooth image reveal on scroll (used on images) */
+@keyframes revealUp {
+  from { clip-path: inset(100% 0 0 0); opacity: 0; }
+  to { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+
+.reveal-up {
+  animation: revealUp 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Smooth focus states */
+*:focus-visible {
+  outline: 2px solid #99ccff;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Hero cover — MOOSER-style cinematic text reveal */
+.hero-reveal-line {
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-reveal-line.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero stars — pop-in with glow */
+.hero-star {
+  opacity: 0;
+  transform: scale(0) rotate(-30deg);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: brightness(1);
+}
+
+.hero-star.is-revealed {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  animation: star-pulse 3s ease-in-out infinite;
+}
+
+@keyframes star-pulse {
+  0%, 100% { filter: brightness(1); transform: scale(1); }
+  50% { filter: brightness(1.4); transform: scale(1.12); }
+}
+
+/* Hero cascade title — Badrutt's style stagger reveal */
+.hero-cascade-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(110%);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-cascade-line.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Speech bubble float animation */
+@keyframes speechFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
+  50% { transform: translateY(-6px) scale(1.03); opacity: 0.95; }
+}
+.animate-speech-float {
+  animation: speechFloat 3s ease-in-out infinite;
+}
+
+/* Floating food emojis from mouth */
+@keyframes foodFloat {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.5); }
+  20% { opacity: 1; transform: translate(-5px, -12px) scale(1); }
+  80% { opacity: 0.6; transform: translate(-15px, -50px) scale(1.1) rotate(15deg); }
+  100% { opacity: 0; transform: translate(-20px, -70px) scale(0.6) rotate(25deg); }
+}
+.animate-food-float {
+  animation: foodFloat 3.6s ease-out infinite;
+  opacity: 0;
+}
+
+/* ── Dolomites Showcase — highlight & glow effects ── */
+@keyframes dolomites-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.dolomites-glow {
+  color: #c5a059;
+  background: linear-gradient(
+    90deg,
+    #c5a059 0%,
+    #e8d5a0 25%,
+    #c5a059 50%,
+    #b8924a 75%,
+    #c5a059 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: dolomites-shimmer 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(197, 160, 89, 0.3));
+  font-style: italic;
+}
+
+.dolomites-highlight {
+  transition: all 0.5s ease;
+}
+
+.dolomites-highlight:hover {
+  filter: drop-shadow(0 0 8px rgba(197, 160, 89, 0.5));
+  transform: scale(1.05);
+}
+
+
