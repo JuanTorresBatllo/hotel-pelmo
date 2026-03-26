@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 .env
-Pelmo_fotos
+/Pelmo_fotos
 *.local
 
 # Editor directories and files
