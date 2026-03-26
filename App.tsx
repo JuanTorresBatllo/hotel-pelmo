@@ -217,13 +217,41 @@ const TaglineSection: React.FC = () => {
 
 const AppContent: React.FC = () => {
   const { t } = useLanguage();
-  const [activeView, setActiveView] = useState<ViewType>('home');
+  const [activeView, setActiveView] = useState<ViewType>(() => {
+    const path = window.location.pathname.replace(/^\//, '') as ViewType;
+    const valid: ViewType[] = ['home', 'rooms', 'wellness', 'activities', 'dining', 'contact'];
+    return valid.includes(path) ? path : 'home';
+  });
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   useSectionSnap(activeView === 'home');
 
+  // Listen for browser back/forward
+  useEffect(() => {
+    const onPopState = (e: PopStateEvent) => {
+      const view = (e.state?.view as ViewType) || 'home';
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setActiveView(view);
+        window.scrollTo({ top: 0 });
+        requestAnimationFrame(() => {
+          setTimeout(() => setIsTransitioning(false), 50);
+        });
+      }, 400);
+    };
+    window.addEventListener('popstate', onPopState);
+    // Replace current state so first entry has view info
+    window.history.replaceState({ view: activeView }, '', activeView === 'home' ? '/' : `/${activeView}`);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const navigateTo = (view: ViewType) => {
-    if (view === activeView) return;
+    if (view === activeView) {
+      // If already on this view, scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    window.history.pushState({ view }, '', view === 'home' ? '/' : `/${view}`);
     setIsTransitioning(true);
     setTimeout(() => {
       setActiveView(view);

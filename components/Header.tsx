@@ -52,7 +52,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeView }) => {
   return (
     <>
       <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-700 ${
-        showBlueBg ? 'bg-[#99ccff] backdrop-blur-xl py-3 shadow-[0_1px_20px_rgba(0,0,0,0.1)]' : 'bg-transparent py-6'
+        showBlueBg ? 'bg-[#99ccff]/40 backdrop-blur-xl py-3 shadow-[0_1px_20px_rgba(0,0,0,0.1)]' : 'bg-transparent py-6'
       }`}>
         <div className="w-full px-6 md:px-10 flex items-center justify-between">
           {/* Logo / Hotel Name — extreme left */}
