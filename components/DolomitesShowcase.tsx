@@ -46,16 +46,6 @@ const DolomitesShowcase: React.FC = () => {
       {/* ── Text overlay ── */}
       <div className="relative z-10 flex items-center justify-center h-full px-6 md:px-12">
         <div className="max-w-4xl text-center">
-          {/* Subtitle */}
-          <p
-            className={`text-white/50 uppercase tracking-[0.35em] text-[10px] md:text-xs font-semibold mb-6 transition-all duration-[1.4s] ease-out ${
-              visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-            style={{ fontFamily: "'PT Sans', sans-serif" }}
-          >
-            {t('A World Heritage Wonder')}
-          </p>
-
           {/* Title */}
           <h2
             className={`mb-8 md:mb-10 text-4xl md:text-6xl lg:text-7xl text-white font-bold leading-none [&_strong]:text-[#c5a059] [&_strong]:italic transition-all duration-[1.6s] ease-out ${
