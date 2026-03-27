@@ -164,13 +164,13 @@ html {
   cursor: pointer;
   font-family: 'PT Sans', sans-serif;
   font-size: 1.15rem;
-  font-weight: 200;
+  font-weight: 700;
   letter-spacing: 0.04em;
-  color: rgba(26, 26, 26, 0.35);
+  color: rgba(153, 204, 255, 0.5);
   padding: 0.5rem 0.75rem;
   position: relative;
   white-space: nowrap;
-  transition: color 0.3s ease, font-weight 0.3s ease;
+  transition: color 0.3s ease;
 }
 
 .oj-swiper-timeline__date-btn::after {
@@ -180,18 +180,18 @@ html {
   left: 0;
   right: 0;
   height: 3px;
-  background: #c5a059;
+  background: #99ccff;
   transform: scaleX(0);
   transition: transform 0.3s ease;
 }
 
 .oj-swiper-timeline__date-btn:hover {
-  color: #1a1a1a;
+  color: #99ccff;
 }
 
 .oj-swiper-timeline__date-btn.active {
-  color: #1a1a1a;
-  font-weight: 600;
+  color: #99ccff;
+  font-weight: 700;
 }
 
 .oj-swiper-timeline__date-btn.active::after {
