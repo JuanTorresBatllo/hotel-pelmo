@@ -101,7 +101,7 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
   }, [hotelVisible, triggerReveal]);
 
   return (
-    <section ref={sectionRef} className="relative bg-[#f0f1e3] overflow-hidden h-screen flex flex-col justify-center snap-section">
+    <section ref={sectionRef} className="relative bg-[#f0f1e3] overflow-hidden h-screen flex flex-col justify-center snap-section" data-hide-logo>
       {/* Title — pops up after skyline finishes drawing */}
       <div
         className="text-center pt-4 md:pt-6 pb-2 md:pb-4 relative z-10 transition-all duration-[1.2s] ease-out"

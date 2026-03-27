@@ -244,9 +244,9 @@ const OurJourney: React.FC = () => {
 
         {/* Swiper Timeline — sticky so CTA/stats scroll over it */}
         <div className="relative h-[200vh]">
-          <div className="sticky top-0 h-screen overflow-hidden bg-[#f0f1e3] flex items-center">
-            <div className="oj-swiper-timeline w-full">
-              <div className="oj-swiper-timeline__slider">
+          <div className="sticky top-0 h-screen overflow-hidden bg-[#f0f1e3]">
+            <div className="oj-swiper-timeline w-full h-full">
+              <div className="oj-swiper-timeline__slider h-full">
                 {/* Date pagination */}
                 <div className="oj-swiper-timeline__dates">
                   {milestones.map((m, i) => (

@@ -25,6 +25,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeView }) => {
   const [onDarkSection, setOnDarkSection] = useState(false);
 
   const [onLightSection, setOnLightSection] = useState(true);
+  const [hideLogo, setHideLogo] = useState(true);
 
   useEffect(() => {
     const onScroll = () => {
@@ -40,6 +41,18 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeView }) => {
         }
       }
       setOnDarkSection(dark);
+
+      // Hide logo when on a section with data-hide-logo
+      const hideLogoSections = document.querySelectorAll('[data-hide-logo]');
+      let shouldHide = false;
+      for (const section of hideLogoSections) {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 120 && rect.bottom > 100) {
+          shouldHide = true;
+          break;
+        }
+      }
+      setHideLogo(shouldHide);
 
       // Detect light background at header position
       const el = document.elementFromPoint(window.innerWidth / 2, 40);
@@ -79,7 +92,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeView }) => {
           {/* Logo / Hotel Name — extreme left */}
           <button
             onClick={() => { onNavigate('home'); setMenuOpen(false); }}
-            className="text-left group focus:outline-none z-50 flex items-center gap-3"
+            className={`text-left group focus:outline-none z-50 flex items-center gap-3 transition-opacity duration-500 ${hideLogo && !menuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
           >
             {/* Edelweiss SVG */}
             <svg
