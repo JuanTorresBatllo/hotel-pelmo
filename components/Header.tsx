@@ -24,6 +24,8 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeView }) => {
 
   const [onDarkSection, setOnDarkSection] = useState(false);
 
+  const [onLightSection, setOnLightSection] = useState(true);
+
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 60);
@@ -32,14 +34,33 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeView }) => {
       let dark = false;
       for (const section of darkSections) {
         const rect = section.getBoundingClientRect();
-        // Trigger when section top is within 120px of viewport top (approaching)
-        // and its bottom still covers the viewport
         if (rect.top <= 120 && rect.bottom > 100) {
           dark = true;
           break;
         }
       }
       setOnDarkSection(dark);
+
+      // Detect light background at header position
+      const el = document.elementFromPoint(window.innerWidth / 2, 40);
+      if (el) {
+        let target: Element | null = el;
+        let light = false;
+        while (target && target !== document.body) {
+          const bg = getComputedStyle(target).backgroundColor;
+          const match = bg.match(/\d+/g);
+          if (match && match.length >= 3) {
+            const [r, g, b] = match.map(Number);
+            const a = match.length >= 4 ? parseFloat(match[3]) : 1;
+            if (a > 0.1 && (r * 0.299 + g * 0.587 + b * 0.114) > 180) {
+              light = true;
+              break;
+            }
+          }
+          target = target.parentElement;
+        }
+        setOnLightSection(light);
+      }
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
@@ -47,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeView }) => {
   }, []);
 
   const showBlueBg = scrolled && !onDarkSection;
-  const useWhiteText = scrolled || onDarkSection;
+  const useWhiteText = onDarkSection || !onLightSection;
 
   return (
     <>
@@ -91,13 +112,13 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeView }) => {
             <div>
               <h1
                 className={`text-4xl md:text-5xl tracking-tight font-bold transition-colors duration-300 ${useWhiteText || menuOpen ? 'text-white group-hover:text-white/80' : 'text-[#1a1a1a] group-hover:text-[#1a1a1a]/70'}`}
-                style={{ fontFamily: "'Caveat', cursive" }}
+                style={{ fontFamily: "'Obra Letra', cursive" }}
               >
                 Al Pelmo
               </h1>
               <span
                 className={`text-sm md:text-base uppercase tracking-[0.3em] font-bold block mt-0.5 ${useWhiteText || menuOpen ? 'text-white/60' : 'text-[#1a1a1a]/50'}`}
-                style={{ fontFamily: "'Caveat', cursive" }}
+                style={{ fontFamily: "'Obra Letra', cursive" }}
               >
                 dal 1919
               </span>

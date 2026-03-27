@@ -1,5 +1,5 @@
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -15,7 +15,7 @@ const rooms = [
     price: '120 - 150',
     size: '16 m²',
     guests: '2',
-    image: '/images/Room_1.png',
+    image: '/Pelmo_fotos/room0.png',
     amenities: ['Mountain View', 'Fireplace', 'Larch Wood'],
   },
   {
@@ -26,7 +26,7 @@ const rooms = [
     price: '150 - 180',
     size: '25 m²',
     guests: '3',
-    image: '/images/Room_2.png',
+    image: '/Pelmo_fotos/room1.png',
     amenities: ['Valley Views', 'Private Terrace', 'Rain Shower'],
   },
   {
@@ -37,7 +37,7 @@ const rooms = [
     price: '180 - 220',
     size: '30 m²',
     guests: '4',
-    image: '/images/Room_3.png',
+    image: '/Pelmo_fotos/room2.png',
     amenities: ['Dolomites Panorama', 'Private Sauna', 'Two Levels'],
   }
 ];
@@ -105,9 +105,9 @@ const RoomsView: React.FC = () => {
                 {['Rooms &', 'Suites'].map((line, i) => (
                   <span
                     key={i}
-                    className={`block ${i === 1 ? 'font-light italic text-white/80' : 'font-bold text-white'}`}
+                    className="block font-bold text-white uppercase"
                     style={{
-                      fontSize: 'clamp(3.5rem, 10vw, 11rem)',
+                      fontSize: 'clamp(3.5rem, 10vw, 8rem)',
                       lineHeight: 0.9,
                       letterSpacing: '-0.02em',
                     }}

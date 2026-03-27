@@ -77,9 +77,9 @@ const DiningView: React.FC = () => {
                 {['Ristorante', 'dal 1919'].map((line, i) => (
                   <span
                     key={i}
-                    className={`block ${i === 1 ? 'font-light italic text-white/80' : 'font-bold text-white'}`}
+                    className="block font-bold text-white uppercase"
                     style={{
-                      fontSize: 'clamp(3.5rem, 10vw, 11rem)',
+                      fontSize: 'clamp(3.5rem, 10vw, 8rem)',
                       lineHeight: 0.9,
                       letterSpacing: '-0.02em',
                     }}

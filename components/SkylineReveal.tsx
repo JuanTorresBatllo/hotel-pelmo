@@ -100,7 +100,7 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
         <h1
           className="font-bold leading-none text-[#1a1a1a]"
           style={{
-            fontFamily: "'Caveat', cursive",
+            fontFamily: "'Obra Letra', cursive",
             fontSize: 'clamp(3rem, 9vw, 7.5rem)',
             letterSpacing: '0.02em',
           }}
@@ -143,16 +143,24 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
 
       {/* Layered canvas: hotel PNG + SVG landscape overlay + CTA buttons */}
       <div className="relative w-full flex-1 min-h-0">
+        {/* SVG skyline — behind the hotel */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 pointer-events-none"
           style={{ transform: 'scale(1.2)', transformOrigin: 'center bottom' }}
         >
           <div
             ref={svgContainerRef}
-            className="absolute inset-0 w-full h-full pointer-events-none"
+            className="absolute inset-0 w-full h-full"
           />
+        </div>
+
+        {/* Hotel PNG — in front of the skyline */}
+        <div
+          className="absolute inset-0 z-10"
+          style={{ transform: 'scale(1.3) translateY(60px)', transformOrigin: 'center bottom' }}
+        >
           <img
-            src="/Pelmo_fotos/pelmo_image_transparent.png"
+            src="/Pelmo_fotos/pelmo_transparent_luz.png"
             alt="Hotel Al Pelmo"
             className={`absolute inset-0 w-full h-full object-contain transition-all duration-[1.8s] ease-out ${
               hotelVisible ? 'opacity-100 scale-95' : 'opacity-0 scale-[0.96]'
@@ -162,7 +170,7 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
 
         {/* CTA buttons — overlaid at bottom-center of image */}
         <div
-          className="absolute bottom-[12%] inset-x-0 z-20 flex items-center justify-center gap-20 md:gap-40 transition-all duration-[1s] ease-out"
+          className="absolute bottom-[3%] inset-x-0 z-20 flex items-center justify-center gap-20 md:gap-40 transition-all duration-[1s] ease-out"
           style={{
             opacity: titleRevealed ? 1 : 0,
             transform: titleRevealed ? 'translateY(0)' : 'translateY(12px)',
@@ -171,23 +179,13 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
         >
           <button
             onClick={() => onNavigate?.('contact')}
-            className="px-8 py-2.5 text-[13px] font-semibold tracking-[0.15em] uppercase rounded-full text-white transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
-            style={{
-              fontFamily: "'PT Sans', sans-serif",
-              background: 'linear-gradient(135deg, #1a1a1a 0%, #333 100%)',
-              boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
-            }}
+            className="button-53"
           >
             {t('Contact Us')}
           </button>
           <button
             id="be-submit-1"
-            className="px-8 py-2.5 text-[13px] font-semibold tracking-[0.15em] uppercase rounded-full text-white transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
-            style={{
-              fontFamily: "'PT Sans', sans-serif",
-              background: 'linear-gradient(135deg, #1a1a1a 0%, #333 100%)',
-              boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
-            }}
+            className="button-53"
           >
             {t('Book Now')}
           </button>

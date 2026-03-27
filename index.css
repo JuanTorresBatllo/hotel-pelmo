@@ -55,6 +55,390 @@ html {
 }
 
 /* ══════════════════════════════════════════════════════
+   BUTTON-53 STYLE
+   ══════════════════════════════════════════════════════ */
+
+.button-53 {
+  background-color: rgba(90, 143, 191, 0.75);
+  border: 0 solid #E5E7EB;
+  box-sizing: border-box;
+  color: #000000;
+  display: flex;
+  font-family: ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1.75rem;
+  padding: .75rem 1.65rem;
+  position: relative;
+  text-align: center;
+  text-decoration: none #000000 solid;
+  text-decoration-thickness: auto;
+  width: auto;
+  max-width: none;
+  cursor: pointer;
+  transform: rotate(-2deg);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-53:focus {
+  outline: 0;
+}
+
+.button-53:after {
+  content: '';
+  position: absolute;
+  border: 1px solid #000000;
+  bottom: 4px;
+  left: 4px;
+  width: calc(100% - 1px);
+  height: calc(100% - 1px);
+}
+
+.button-53:hover:after {
+  bottom: 2px;
+  left: 2px;
+}
+
+@media (min-width: 768px) {
+  .button-53 {
+    padding: .75rem 3rem;
+    font-size: 1.25rem;
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   Edelweiss animation — Our Journey title
+   ══════════════════════════════════════════════════════ */
+
+@keyframes edelweiss-float {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  25% { transform: translateY(-18px) rotate(12deg) scale(1.05); }
+  50% { transform: translateY(-8px) rotate(-8deg) scale(0.97); }
+  75% { transform: translateY(-22px) rotate(6deg) scale(1.02); }
+  100% { transform: translateY(0) rotate(0deg) scale(1); }
+}
+
+.animate-edelweiss {
+  animation: edelweiss-float 14s ease-in-out infinite;
+}
+
+/* ══════════════════════════════════════════════════════
+   OUR JOURNEY — Swiper Timeline (AW Hainsworth style)
+   ══════════════════════════════════════════════════════ */
+
+/* ── Swiper Timeline ── */
+.oj-swiper-timeline {
+  padding: clamp(2rem, 4vw, 4rem) 0 clamp(3rem, 6vw, 5rem);
+  background: #f0f1e3;
+}
+
+.oj-swiper-timeline__slider {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ── Date Pagination Row ── */
+.oj-swiper-timeline__dates {
+  display: flex;
+  justify-content: center;
+  gap: clamp(0.5rem, 1.5vw, 1.5rem);
+  padding: 0 1rem 2rem;
+  border-bottom: 1px solid rgba(26, 26, 26, 0.1);
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.oj-swiper-timeline__dates::-webkit-scrollbar {
+  display: none;
+}
+
+.oj-swiper-timeline__date-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'PT Sans', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 200;
+  letter-spacing: 0.04em;
+  color: rgba(26, 26, 26, 0.35);
+  padding: 0.5rem 0.75rem;
+  position: relative;
+  white-space: nowrap;
+  transition: color 0.3s ease, font-weight 0.3s ease;
+}
+
+.oj-swiper-timeline__date-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #c5a059;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.oj-swiper-timeline__date-btn:hover {
+  color: #1a1a1a;
+}
+
+.oj-swiper-timeline__date-btn.active {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.oj-swiper-timeline__date-btn.active::after {
+  transform: scaleX(1);
+}
+
+/* ── Swiper overrides ── */
+.oj-swiper-timeline .swiper {
+  overflow: hidden;
+}
+
+.oj-swiper-timeline .swiper-slide {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.oj-swiper-timeline .swiper-slide-active {
+  opacity: 1;
+}
+
+/* ── Event Slide (2-column layout) ── */
+.oj-event {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 4vw, 3rem);
+  align-items: center;
+  padding: 1rem 0;
+}
+
+@media (min-width: 960px) {
+  .oj-event {
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(3rem, 5vw, 5rem);
+  }
+}
+
+/* ── Event Image — Polaroid Stack ── */
+.oj-event__images {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+/* Polaroid stack container */
+.oj-polaroid-stack {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 3 / 3.5;
+}
+
+/* Single image — no stack, just centered polaroid */
+.oj-polaroid-stack:not(.oj-polaroid-stack--multi) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.oj-polaroid-stack:not(.oj-polaroid-stack--multi) .oj-polaroid {
+  position: relative;
+  max-width: 440px;
+  width: 100%;
+}
+
+/* Multi-image stack — all start centered (stacked), then spread */
+.oj-polaroid-stack--multi .oj-polaroid {
+  position: absolute;
+  width: 54%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.4s ease;
+}
+
+/* Spread state — triggered ~1s after slide appears (class-driven)
+   Layout: child1 = top-left, child2 = top-right, child3 = bottom-center */
+.oj-polaroid-stack--spread .oj-polaroid:nth-child(1) {
+  transform: translate(-105%, -90%) rotate(var(--rot, 0deg));
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+.oj-polaroid-stack--spread .oj-polaroid:nth-child(2) {
+  transform: translate(5%, -80%) rotate(var(--rot, 0deg));
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+.oj-polaroid-stack--spread .oj-polaroid:nth-child(3) {
+  transform: translate(-50%, -5%) rotate(var(--rot, 0deg));
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Individual polaroid frame */
+.oj-polaroid {
+  background: #fff;
+  padding: 10px 10px 36px;
+  border-radius: 2px;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.06),
+    1px 1px 0 rgba(0, 0, 0, 0.02);
+  cursor: default;
+}
+
+.oj-polaroid img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  aspect-ratio: 4 / 3;
+}
+
+.oj-polaroid__caption {
+  display: block;
+  font-family: 'PT Sans', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(26, 26, 26, 0.35);
+  text-align: center;
+  margin-top: 8px;
+  line-height: 1.3;
+}
+
+/* ── Event Content ── */
+.oj-event__content {
+  padding: 0 1rem;
+}
+
+.oj-event__date {
+  font-family: 'PT Sans', sans-serif;
+  font-size: clamp(5rem, 15vw, 12rem);
+  font-weight: 200;
+  font-style: italic;
+  color: rgba(26, 26, 26, 0.06);
+  line-height: 1;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.oj-event__title {
+  font-family: 'PT Sans', sans-serif;
+  font-size: clamp(0.75rem, 1vw, 0.875rem);
+  font-weight: 700;
+  color: #c5a059;
+  line-height: 1.4;
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.oj-event__text {
+  font-family: 'PT Sans', sans-serif;
+  font-size: 1rem;
+  color: #1a1a1a;
+  line-height: 1.6;
+  margin: 0 0 2rem;
+  max-width: 440px;
+}
+
+/* ── Prev / Next Buttons ── */
+.oj-event__buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.oj-event__btn {
+  width: 56px;
+  height: 56px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1a1a1a;
+  padding: 0;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.oj-event__btn:hover {
+  color: #c5a059;
+  transform: scale(1.08);
+}
+
+.oj-event__btn--prev {
+  transform: scaleX(-1);
+}
+
+.oj-event__btn--prev:hover {
+  transform: scaleX(-1) scale(1.08);
+}
+
+.oj-event__btn svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Mobile adjustments ── */
+@media (max-width: 959px) {
+  .oj-event {
+    text-align: center;
+  }
+
+  .oj-event__content {
+    padding: 0;
+  }
+
+  .oj-event__text {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .oj-event__buttons {
+    justify-content: center;
+  }
+
+  .oj-event__date {
+    font-size: clamp(4rem, 20vw, 7rem);
+  }
+
+  .oj-polaroid-stack {
+    max-width: 340px;
+  }
+
+  .oj-polaroid-stack--multi .oj-polaroid {
+    width: 56%;
+  }
+
+  .oj-polaroid-stack--spread .oj-polaroid:nth-child(1) {
+    transform: translate(-100%, -85%) rotate(var(--rot, 0deg));
+  }
+  .oj-polaroid-stack--spread .oj-polaroid:nth-child(2) {
+    transform: translate(2%, -75%) rotate(var(--rot, 0deg));
+  }
+  .oj-polaroid-stack--spread .oj-polaroid:nth-child(3) {
+    transform: translate(-50%, -8%) rotate(var(--rot, 0deg));
+  }
+
+  .oj-polaroid {
+    padding: 6px 6px 26px;
+  }
+
+  .oj-polaroid__caption {
+    font-size: 0.55rem;
+  }
+}
+
+/* ══════════════════════════════════════════════════════
    SCROLL-DRIVEN ANIMATIONS (2025+)
    Progressive enhancement — Chrome 115+, Edge 115+, Safari 18+
    Fallback: IntersectionObserver transitions still active

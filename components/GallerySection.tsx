@@ -81,7 +81,7 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ section, index, onNavigat
   }, []);
 
   return (
-    <div ref={ref} className="relative h-screen w-full overflow-hidden snap-section bg-[#f0f1e3]">
+    <div ref={ref} className="relative h-screen w-full overflow-hidden snap-section bg-[#f0f1e3]" data-header-transparent>
       {/* Image with clip-path reveal — scroll-driven for modern browsers */}
       <div
         className={`absolute inset-0 ${hasScrollTimeline ? 'sda-clip-up' : 'transition-[clip-path] duration-[1.6s]'}`}
@@ -104,10 +104,11 @@ const ScrollSection: React.FC<ScrollSectionProps> = ({ section, index, onNavigat
         <WaveText
           text={t(section.title)}
           onClick={() => onNavigate?.(section.view)}
-          className="text-white font-light tracking-[0.06em] leading-none"
+          className="text-white font-bold tracking-tight leading-none uppercase"
           style={{
             fontFamily: "'PT Sans', sans-serif",
-            fontSize: 'clamp(3rem, 8vw, 9rem)',
+            fontSize: 'clamp(3.5rem, 10vw, 8rem)',
+            letterSpacing: '-0.02em',
           }}
         />
       </div>

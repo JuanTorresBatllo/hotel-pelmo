@@ -15,6 +15,35 @@ import DolomitesShowcase from './components/DolomitesShowcase';
 
 export type ViewType = 'home' | 'rooms' | 'wellness' | 'activities' | 'dining' | 'contact';
 
+/* ── Shared helpers for section snapping ── */
+function getSectionTop(el: HTMLElement): number {
+  return el.getBoundingClientRect().top + window.scrollY;
+}
+
+function easeInOutCubic(t: number): number {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+function smoothScrollToTarget(target: number, onDone?: () => void) {
+  const start = window.scrollY;
+  const distance = target - start;
+  if (Math.abs(distance) < 2) { onDone?.(); return; }
+  const duration = Math.min(1200, Math.max(700, Math.abs(distance) * 0.6));
+  const startTime = performance.now();
+
+  const step = (now: number) => {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    window.scrollTo(0, start + distance * easeInOutCubic(progress));
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      onDone?.();
+    }
+  };
+  requestAnimationFrame(step);
+}
+
 /* ── Fullpage-style section snap for .snap-section elements ── */
 function useSectionSnap(enabled: boolean) {
   const isScrolling = useRef(false);
@@ -23,7 +52,7 @@ function useSectionSnap(enabled: boolean) {
   useEffect(() => {
     if (!enabled) return;
 
-    const SCROLL_COOLDOWN = 800; // ms before next snap is allowed
+    const SCROLL_COOLDOWN = 1200; // ms before next snap is allowed
 
     const getSections = () =>
       Array.from(document.querySelectorAll('.snap-section')) as HTMLElement[];
@@ -34,18 +63,26 @@ function useSectionSnap(enabled: boolean) {
       let closest = 0;
       let minDist = Infinity;
       for (let i = 0; i < sections.length; i++) {
-        const dist = Math.abs(sections[i].offsetTop - scrollY);
+        const dist = Math.abs(getSectionTop(sections[i]) - scrollY);
         if (dist < minDist) { minDist = dist; closest = i; }
       }
       return closest;
     };
 
-    const scrollToSection = (idx: number) => {
+    const scrollToSection = (idx: number, dir: number) => {
       const sections = getSections();
-      if (idx < 0 || idx >= sections.length) return;
+      let target = idx;
+      // Skip data-down-only sections when scrolling up
+      if (dir < 0) {
+        while (target >= 0 && target < sections.length && sections[target].hasAttribute('data-down-only')) {
+          target += dir;
+        }
+      }
+      if (target < 0 || target >= sections.length) return;
       isScrolling.current = true;
-      window.scrollTo({ top: sections[idx].offsetTop, behavior: 'smooth' });
-      setTimeout(() => { isScrolling.current = false; }, SCROLL_COOLDOWN);
+      smoothScrollToTarget(getSectionTop(sections[target]), () => {
+        setTimeout(() => { isScrolling.current = false; }, 100);
+      });
     };
 
     const handleWheel = (e: WheelEvent) => {
@@ -59,16 +96,18 @@ function useSectionSnap(enabled: boolean) {
 
       // Tall section — allow native scroll within, snap only at edges
       if (sectionHeight > vh + 10) {
-        const scrollInSection = window.scrollY - section.offsetTop;
+        const scrollInSection = window.scrollY - getSectionTop(section);
         const maxScroll = sectionHeight - vh;
         if (e.deltaY > 0 && scrollInSection < maxScroll - 5) return; // let native scroll
         if (e.deltaY < 0 && scrollInSection > 5) return;
       }
 
+      const dir = e.deltaY > 0 ? 1 : -1;
+      const nextIdx = idx + dir;
+      if (nextIdx < 0 || nextIdx >= sections.length) return; // let native scroll (e.g. to footer)
       e.preventDefault();
       if (isScrolling.current) return;
-      const dir = e.deltaY > 0 ? 1 : -1;
-      scrollToSection(idx + dir);
+      scrollToSection(nextIdx, dir);
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -80,14 +119,17 @@ function useSectionSnap(enabled: boolean) {
       const idx = getCurrentIdx();
       const section = getSections()[idx] ?? null;
       if (section && section.offsetHeight > window.innerHeight + 10) {
-        const scrollIn = window.scrollY - section.offsetTop;
+        const scrollIn = window.scrollY - getSectionTop(section);
         const maxScroll = section.offsetHeight - window.innerHeight;
-        if (down && scrollIn < maxScroll - 5) return; // let native key scroll
+        if (down && scrollIn < maxScroll - 5) return;
         if (up && scrollIn > 5) return;
       }
 
+      const kDir = down ? 1 : -1;
+      const kNext = idx + kDir;
+      if (kNext < 0 || kNext >= getSections().length) return;
       e.preventDefault();
-      scrollToSection(idx + (down ? 1 : -1));
+      scrollToSection(kNext, kDir);
     };
 
     const handleTouchStart = (e: TouchEvent) => {
@@ -102,13 +144,13 @@ function useSectionSnap(enabled: boolean) {
       const idx = getCurrentIdx();
       const section = getSections()[idx];
       if (section && section.offsetHeight > window.innerHeight + 10) {
-        const scrollIn = window.scrollY - section.offsetTop;
+        const scrollIn = window.scrollY - getSectionTop(section);
         const maxScroll = section.offsetHeight - window.innerHeight;
         if (diff > 0 && scrollIn < maxScroll - 5) return;
         if (diff < 0 && scrollIn > 5) return;
       }
 
-      scrollToSection(idx + (diff > 0 ? 1 : -1));
+      scrollToSection(idx + (diff > 0 ? 1 : -1), diff > 0 ? 1 : -1);
     };
 
     window.addEventListener('wheel', handleWheel, { passive: false });
@@ -129,10 +171,14 @@ function useSectionSnap(enabled: boolean) {
 const SectionDots: React.FC = () => {
   const [activeIdx, setActiveIdx] = useState(0);
   const [total, setTotal] = useState(0);
+  const [onLight, setOnLight] = useState(false);
+
+  const getDotSections = () =>
+    Array.from(document.querySelectorAll('.snap-section:not([data-no-dot])')) as HTMLElement[];
 
   useEffect(() => {
     const update = () => {
-      const sections = Array.from(document.querySelectorAll('.snap-section')) as HTMLElement[];
+      const sections = getDotSections();
       setTotal(sections.length);
       if (sections.length === 0) return;
 
@@ -140,15 +186,25 @@ const SectionDots: React.FC = () => {
       let closestIdx = 0;
       let minDist = Infinity;
       for (let i = 0; i < sections.length; i++) {
-        const dist = Math.abs(sections[i].offsetTop - scrollY);
+        const dist = Math.abs(getSectionTop(sections[i]) - scrollY);
         if (dist < minDist) { minDist = dist; closestIdx = i; }
       }
       setActiveIdx(closestIdx);
+
+      // Detect light background by checking computed bg color of current section
+      const sec = sections[closestIdx];
+      if (sec) {
+        const bg = getComputedStyle(sec).backgroundColor;
+        const match = bg.match(/\d+/g);
+        if (match && match.length >= 3) {
+          const [r, g, b] = match.map(Number);
+          setOnLight((r * 0.299 + g * 0.587 + b * 0.114) > 180);
+        }
+      }
     };
 
     window.addEventListener('scroll', update, { passive: true });
     update();
-    // Re-check after layout settles
     const timer = setTimeout(update, 500);
     return () => { window.removeEventListener('scroll', update); clearTimeout(timer); };
   }, []);
@@ -161,14 +217,16 @@ const SectionDots: React.FC = () => {
         <button
           key={i}
           onClick={() => {
-            const sections = Array.from(document.querySelectorAll('.snap-section')) as HTMLElement[];
-            if (sections[i]) window.scrollTo({ top: sections[i].offsetTop, behavior: 'smooth' });
+            const sections = getDotSections();
+            if (sections[i]) smoothScrollToTarget(getSectionTop(sections[i]));
           }}
           aria-label={`Go to section ${i + 1}`}
           className={`rounded-full transition-all duration-500 ${
             i === activeIdx
               ? 'w-2.5 h-2.5 bg-[#99ccff] shadow-[0_0_8px_rgba(153,204,255,0.5)]'
-              : 'w-1.5 h-1.5 bg-white/25 hover:bg-white/50'
+              : onLight
+                ? 'w-1.5 h-1.5 bg-[#1a1a1a]/25 hover:bg-[#1a1a1a]/50'
+                : 'w-1.5 h-1.5 bg-white/25 hover:bg-white/50'
           }`}
         />
       ))}
