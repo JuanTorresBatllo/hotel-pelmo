@@ -48,11 +48,15 @@ function smoothScrollToTarget(target: number, onDone?: () => void) {
 function useSectionSnap(enabled: boolean) {
   const isScrolling = useRef(false);
   const touchStartY = useRef(0);
+  const wheelAccum = useRef(0);
+  const wheelTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!enabled) return;
 
-    const SCROLL_COOLDOWN = 1200; // ms before next snap is allowed
+    const WHEEL_THRESHOLD = 50; // accumulated deltaY before triggering snap
+    const WHEEL_RESET_MS = 200; // reset accumulator after inactivity
+    const SNAP_COOLDOWN = 800; // ms lock after a snap starts
 
     const getSections = () =>
       Array.from(document.querySelectorAll('.snap-section')) as HTMLElement[];
@@ -81,7 +85,7 @@ function useSectionSnap(enabled: boolean) {
       if (target < 0 || target >= sections.length) return;
       isScrolling.current = true;
       smoothScrollToTarget(getSectionTop(sections[target]), () => {
-        setTimeout(() => { isScrolling.current = false; }, 100);
+        setTimeout(() => { isScrolling.current = false; }, SNAP_COOLDOWN);
       });
     };
 
@@ -107,6 +111,14 @@ function useSectionSnap(enabled: boolean) {
       if (nextIdx < 0 || nextIdx >= sections.length) return; // let native scroll (e.g. to footer)
       e.preventDefault();
       if (isScrolling.current) return;
+
+      // Accumulate wheel delta to absorb trackpad momentum bursts
+      wheelAccum.current += Math.abs(e.deltaY);
+      if (wheelTimer.current) clearTimeout(wheelTimer.current);
+      wheelTimer.current = setTimeout(() => { wheelAccum.current = 0; }, WHEEL_RESET_MS);
+
+      if (wheelAccum.current < WHEEL_THRESHOLD) return;
+      wheelAccum.current = 0;
       scrollToSection(nextIdx, dir);
     };
 

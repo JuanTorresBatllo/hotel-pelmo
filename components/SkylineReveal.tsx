@@ -8,6 +8,8 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
   const [hotelVisible, setHotelVisible] = useState(false);
   const [titleRevealed, setTitleRevealed] = useState(false);
   const svgDrawn = useRef(false);
+  const imgLoaded = useRef(false);
+  const inView = useRef(false);
   const { t } = useLanguage();
 
   const startSvgDraw = useCallback(() => {
@@ -71,21 +73,32 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
       });
   }, []);
 
+  const triggerReveal = useCallback(() => {
+    if (!inView.current || !imgLoaded.current || hotelVisible) return;
+    setHotelVisible(true);
+    setTimeout(startSvgDraw, 800);
+  }, [hotelVisible, startSvgDraw]);
+
+  const handleImgLoad = useCallback(() => {
+    imgLoaded.current = true;
+    triggerReveal();
+  }, [triggerReveal]);
+
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
     const obs = new IntersectionObserver(
       ([e]) => {
         if (e.isIntersecting && !hotelVisible) {
-          setHotelVisible(true);
-          setTimeout(startSvgDraw, 800);
+          inView.current = true;
+          triggerReveal();
         }
       },
       { threshold: 0.15 }
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [hotelVisible, startSvgDraw]);
+  }, [hotelVisible, triggerReveal]);
 
   return (
     <section ref={sectionRef} className="relative bg-[#f0f1e3] overflow-hidden h-screen flex flex-col justify-center snap-section">
@@ -162,6 +175,7 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
           <img
             src="/Pelmo_fotos/pelmo_transparent_luz.png"
             alt="Hotel Al Pelmo"
+            onLoad={handleImgLoad}
             className={`absolute inset-0 w-full h-full object-contain transition-all duration-[1.8s] ease-out ${
               hotelVisible ? 'opacity-100 scale-95' : 'opacity-0 scale-[0.96]'
             }`}

@@ -326,7 +326,7 @@ html {
   font-size: clamp(5rem, 15vw, 12rem);
   font-weight: 200;
   font-style: italic;
-  color: rgba(26, 26, 26, 0.06);
+  color: rgba(153, 204, 255, 0.25);
   line-height: 1;
   margin: 0 0 0.5rem;
   letter-spacing: -0.02em;
@@ -409,6 +409,7 @@ html {
 
   .oj-event__date {
     font-size: clamp(4rem, 20vw, 7rem);
+    color: rgba(153, 204, 255, 0.3);
   }
 
   .oj-polaroid-stack {
