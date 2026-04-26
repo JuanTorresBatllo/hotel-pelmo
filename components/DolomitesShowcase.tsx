@@ -37,7 +37,7 @@ const DolomitesShowcase: React.FC = () => {
         loop
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
-        src="/images/dolomites/pieve_cadore_video.mp4"
+        src="/images/dolomites/video_intro.mp4"
       />
 
       {/* ── Dark overlay ── */}

@@ -131,18 +131,6 @@ const DiningView: React.FC = () => {
               alt="Ristorante 1919"
               className="w-full h-full object-cover transition-transform duration-[2.5s] group-hover:scale-105"
             />
-            {/* Floating stats */}
-            <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12 flex gap-4">
-              {[
-                { label: t('Chef'), val: t('Moha Boulmane') },
-                { label: t('Since'), val: '1919' },
-              ].map((stat, i) => (
-                <div key={i} className="bg-white/90 backdrop-blur-md px-5 py-3 rounded-lg">
-                  <span className="text-[9px] uppercase tracking-[0.2em] text-gray-400 font-bold block">{stat.label}</span>
-                  <span className="text-lg text-[#1a1a1a] font-semibold" style={{ fontFamily: "'PT Sans', sans-serif" }}>{stat.val}</span>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Content side */}

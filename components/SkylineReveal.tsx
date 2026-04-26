@@ -20,12 +20,15 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
     if (!container) return;
 
     fetch('/Pelmo_fotos/profile_pelmo.svg')
-      .then((r) => r.text())
+      .then((r) => {
+        if (!r.ok) throw new Error(`SVG fetch failed: ${r.status}`);
+        return r.text();
+      })
       .then((svgText) => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(svgText, 'image/svg+xml');
         const svgEl = doc.querySelector('svg');
-        if (!svgEl) return;
+        if (!svgEl) throw new Error('No <svg> root found');
 
         svgEl.setAttribute('class', 'absolute inset-0 w-full h-full');
         svgEl.style.position = 'absolute';
@@ -47,8 +50,8 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
           rank[originalIdx] = drawOrder;
         });
 
-        const totalStagger = 3;
-        const drawDuration = 1.5;
+        const totalStagger = 1.6;
+        const drawDuration = 1;
 
         paths.forEach((path, i) => {
           const len = path.getTotalLength?.() || 500;
@@ -70,13 +73,18 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
 
         // Reveal title after skyline finishes drawing
         setTimeout(() => setTitleRevealed(true), (totalStagger + drawDuration) * 1000);
+      })
+      .catch((err) => {
+        // Don't leave the page in a half-revealed state if the SVG fails to load.
+        console.error('SkylineReveal SVG load error:', err);
+        setTitleRevealed(true);
       });
   }, []);
 
   const triggerReveal = useCallback(() => {
     if (!inView.current || !imgLoaded.current || hotelVisible) return;
     setHotelVisible(true);
-    setTimeout(startSvgDraw, 800);
+    setTimeout(startSvgDraw, 400);
   }, [hotelVisible, startSvgDraw]);
 
   const handleImgLoad = useCallback(() => {
@@ -104,7 +112,7 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
     <section ref={sectionRef} className="relative bg-[#f0f1e3] overflow-hidden h-screen flex flex-col justify-center snap-section" data-hide-logo>
       {/* Title — pops up after skyline finishes drawing */}
       <div
-        className="text-center pt-4 md:pt-6 pb-2 md:pb-4 relative z-10 transition-all duration-[1.2s] ease-out"
+        className="text-center pt-4 md:pt-6 pb-2 md:pb-4 relative z-10 transition-all duration-[800ms] ease-out"
         style={{
           opacity: titleRevealed ? 1 : 0,
           transform: titleRevealed ? 'translateY(0)' : 'translateY(16px)',
@@ -123,11 +131,11 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
 
         {/* Three stars */}
         <div
-          className="flex items-center justify-center gap-2 mt-2 transition-all duration-[1s] ease-out"
+          className="flex items-center justify-center gap-2 mt-2 transition-all duration-[700ms] ease-out"
           style={{
             opacity: titleRevealed ? 1 : 0,
             transform: titleRevealed ? 'translateY(0)' : 'translateY(8px)',
-            transitionDelay: '0.4s',
+            transitionDelay: '0.25s',
           }}
         >
           {[0, 1, 2].map((i) => (
@@ -136,11 +144,11 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
         </div>
 
         <p
-          className="mt-2 transition-all duration-[1s] ease-out"
+          className="mt-2 transition-all duration-[700ms] ease-out"
           style={{
             opacity: titleRevealed ? 1 : 0,
             transform: titleRevealed ? 'translateY(0)' : 'translateY(8px)',
-            transitionDelay: '0.7s',
+            transitionDelay: '0.45s',
             fontFamily: "'Metamorphous', serif",
             fontWeight: 700,
             fontSize: 'clamp(0.55rem, 1vw, 0.75rem)',
@@ -176,7 +184,7 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
             src="/Pelmo_fotos/pelmo_transparent_luz.png"
             alt="Hotel Al Pelmo"
             onLoad={handleImgLoad}
-            className={`absolute inset-0 w-full h-full object-contain transition-all duration-[1.8s] ease-out ${
+            className={`absolute inset-0 w-full h-full object-contain transition-all duration-[1.2s] ease-out ${
               hotelVisible ? 'opacity-100 scale-95' : 'opacity-0 scale-[0.96]'
             }`}
           />
@@ -184,11 +192,11 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
 
         {/* CTA buttons — overlaid at bottom-center of image */}
         <div
-          className="absolute bottom-[3%] inset-x-0 z-20 flex items-center justify-center gap-20 md:gap-40 transition-all duration-[1s] ease-out"
+          className="absolute bottom-[3%] inset-x-0 z-20 flex items-center justify-center gap-20 md:gap-40 transition-all duration-[700ms] ease-out"
           style={{
             opacity: titleRevealed ? 1 : 0,
             transform: titleRevealed ? 'translateY(0)' : 'translateY(12px)',
-            transitionDelay: '1.2s',
+            transitionDelay: '0.7s',
           }}
         >
           <button

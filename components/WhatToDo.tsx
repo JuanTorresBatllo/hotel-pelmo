@@ -2,51 +2,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { getConciergeResponse } from '../services/geminiService';
 import { useLanguage } from '../contexts/LanguageContext';
-import { FocusCards } from './ui/focus-cards';
+import ExperienceShowcase from './ExperienceShowcase';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
-
-/* ─── Activity data ─── */
-const activities = [
-  {
-    id: 'hiking',
-    title: 'Hiking',
-    image: '/images/mountain_landscape_5.jpeg',
-    tall: true,
-  },
-  {
-    id: 'ski',
-    title: 'Skiing & Snowboard',
-    image: '/images/snow_3.jpeg',
-    tall: false,
-  },
-  {
-    id: 'bike',
-    title: 'Mountain Biking',
-    image: '/images/mountain_landscape_7.jpeg',
-    tall: true,
-  },
-  {
-    id: 'lake',
-    title: 'Lake Adventures',
-    image: '/images/lago_estate.jpeg',
-    tall: false,
-  },
-  {
-    id: 'hub',
-    title: 'Mountain Hub',
-    image: '/images/interior_mountain_hub.jpeg',
-    tall: false,
-  },
-  {
-    id: 'culture',
-    title: 'Art & Culture',
-    image: '/images/village_2.jpeg',
-    tall: true,
-  },
-];
 
 /* ─── Quick suggestion chips for the AI ─── */
 const quickChips = [
@@ -73,7 +33,6 @@ const WhatToDo: React.FC = () => {
   useEffect(() => {
     // Set initial hidden state immediately
     gsap.set('[data-wtd-header]', { opacity: 0, y: 60 });
-    gsap.set('[data-wtd-card]', { opacity: 0, y: 80 });
 
     // Small delay so layout settles after mount
     const timer = setTimeout(() => {
@@ -90,23 +49,6 @@ const WhatToDo: React.FC = () => {
             toggleActions: 'play none none none',
           },
         });
-
-        // Grid items — staggered waterfall reveal
-        const cards = gsap.utils.toArray<HTMLElement>('[data-wtd-card]');
-        cards.forEach((card) => {
-          gsap.to(card, {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 90%',
-              toggleActions: 'play none none none',
-            },
-          });
-        });
-
       }, sectionRef);
 
       return () => ctx.revert();
@@ -235,9 +177,9 @@ Be warm, concise, and use light formatting. User message: ${userMsg}`;
         </p>
       </div>
 
-      {/* ── Focus Cards grid ── */}
-      <div className="max-w-[1400px] mx-auto px-4 md:px-8 pb-28 md:pb-40">
-        <FocusCards cards={activities.map(a => ({ title: t(a.title), src: a.image }))} />
+      {/* ── Interactive experience showcase ── */}
+      <div className="pb-28 md:pb-40">
+        <ExperienceShowcase />
       </div>
 
       {/* ── Floating AI Chat Widget ── */}
