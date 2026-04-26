@@ -5,7 +5,7 @@ import Header from './components/Header';
 import GallerySection from './components/GallerySection';
 import OurJourney from './components/OurJourney';
 import WhatToDo from './components/WhatToDo';
-import Footer from './components/Footer';
+import Footer from './components/ui/footer-taped-design';
 import RoomsView from './components/RoomsView';
 import WellnessView from './components/WellnessView';
 import DiningView from './components/DiningView';

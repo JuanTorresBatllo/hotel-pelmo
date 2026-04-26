@@ -5,6 +5,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 import { WaveText } from './ui/wave-text';
+import { AnimatedText } from './ui/animated-underline-text-one';
+import { motion } from 'framer-motion';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
@@ -225,21 +227,56 @@ const OurJourney: React.FC = () => {
       <section className="relative bg-[#f0f1e3] snap-section" data-no-dot>
 
         {/* Centered intro heading */}
-        <div className="flex flex-col items-center justify-center text-center px-8 pt-24 pb-10 md:pt-36 md:pb-16">
-          <h2
-            className="text-2xl md:text-3xl lg:text-4xl text-[#1a1a1a] font-light tracking-tight leading-[1.3]"
-            style={{ fontFamily: "'PT Sans', sans-serif" }}
+        <div className="relative flex flex-col items-center justify-center text-center px-8 pt-24 pb-10 md:pt-36 md:pb-16 overflow-hidden">
+          {/* Decorative est. badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+            className="flex items-center gap-3 mb-6"
           >
-            {t('Hotel Al Pelmo through the')}{' '}
-            <em className="italic text-[#c5a059]">{t('years')}</em>
-          </h2>
-          <p
-            className="mt-6 max-w-2xl text-[#1a1a1a]/50 text-base md:text-lg font-light leading-relaxed"
+            <span className="h-px w-10 bg-[#c5a059]/60" />
+            <span
+              className="uppercase tracking-[0.4em] text-[10px] md:text-xs text-[#c5a059] font-semibold"
+              style={{ fontFamily: "'PT Sans', sans-serif" }}
+            >
+              Est. 1919 &middot; Pieve di Cadore
+            </span>
+            <span className="h-px w-10 bg-[#c5a059]/60" />
+          </motion.div>
+
+          <AnimatedText
+            text={
+              <>
+                {t('Hotel Al Pelmo through the')}{' '}
+                <em className="italic font-light text-[#c5a059]">{t('years')}</em>
+              </>
+            }
+            textClassName="text-3xl md:text-5xl lg:text-6xl text-[#1a1a1a] font-light tracking-tight leading-[1.15]"
+            underlineClassName="text-[#c5a059] -bottom-2 md:-bottom-3"
+            underlineDuration={1.8}
+            className="!gap-0"
+          />
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
+            className="mt-12 max-w-2xl text-[#1a1a1a]/55 text-base md:text-lg font-light leading-relaxed"
             style={{ fontFamily: "'PT Sans', sans-serif" }}
           >
             {t('Established in 1919, our heritage is a testament to enduring craftsmanship and alpine hospitality. Explore our heritage and experience the tradition of excellence that defines Hotel Al Pelmo.')}
-          </p>
-          <div className="w-[60px] h-[2px] bg-[#c5a059] mx-auto mt-8" />
+          </motion.p>
+
+          <motion.div
+            initial={{ scaleX: 0, opacity: 0 }}
+            whileInView={{ scaleX: 1, opacity: 1 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 1.2, delay: 0.6, ease: 'easeOut' }}
+            className="w-[80px] h-[2px] bg-gradient-to-r from-transparent via-[#c5a059] to-transparent mx-auto mt-10 origin-center"
+          />
         </div>
 
         {/* Swiper Timeline — sticky so CTA/stats scroll over it */}
@@ -424,7 +461,7 @@ const AnimatedCounter: React.FC<{ target: number; suffix?: string; duration?: nu
 const stats = [
   { value: 3247, suffix: '+', label: 'Guests Last Year' },
   { value: 107, suffix: '', label: 'Years of Tradition' },
-  { value: 82, suffix: '%', label: 'Guest Satisfaction' },
+  { value: 86, suffix: '%', label: 'Guest Satisfaction' },
   { value: 42, suffix: '', label: 'Rooms & Suites' },
   { value: 15000, suffix: '+', label: 'Meals Served Yearly' },
   { value: 4, suffix: '', label: 'Generations of Family' },

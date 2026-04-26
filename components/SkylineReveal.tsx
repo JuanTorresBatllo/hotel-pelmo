@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { ViewType } from '../App';
+import TextCursorProximity from './ui/text-cursor-proximity';
 
 const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ onNavigate }) => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -109,7 +110,7 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
   }, [hotelVisible, triggerReveal]);
 
   return (
-    <section ref={sectionRef} className="relative bg-[#f0f1e3] overflow-hidden h-screen flex flex-col justify-center snap-section" data-hide-logo>
+    <section ref={sectionRef} className="relative bg-[#f0f1e3] overflow-hidden h-screen flex flex-col justify-center snap-section">
       {/* Title — pops up after skyline finishes drawing */}
       <div
         className="text-center pt-4 md:pt-6 pb-2 md:pb-4 relative z-10 transition-all duration-[800ms] ease-out"
@@ -126,7 +127,17 @@ const SkylineReveal: React.FC<{ onNavigate?: (view: ViewType) => void }> = ({ on
             letterSpacing: '0.02em',
           }}
         >
-          Hotel Al Pelmo
+          <TextCursorProximity
+            label="Hotel Al Pelmo"
+            containerRef={sectionRef}
+            radius={140}
+            falloff="gaussian"
+            styles={{
+              transform: { from: 'scale(1)', to: 'scale(1.18)' },
+              color: { from: '#1a1a1a', to: '#c5a059' },
+              fontWeight: { from: 700, to: 900 },
+            }}
+          />
         </h1>
 
         {/* Three stars */}

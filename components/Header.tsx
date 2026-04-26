@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, activeView }) => {
   const [onDarkSection, setOnDarkSection] = useState(false);
 
   const [onLightSection, setOnLightSection] = useState(true);
-  const [hideLogo, setHideLogo] = useState(true);
+  const [hideLogo, setHideLogo] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
